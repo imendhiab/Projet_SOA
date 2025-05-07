@@ -1,0 +1,82 @@
+syntax = "proto3";
+
+package joueur;
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/empty.proto";
+
+message Fiche {
+  string id = 1;
+  google.protobuf.Timestamp date = 2;
+  float tension = 3;
+  float oxy = 4;
+}
+
+// Définition du message joueur
+message Joueur {
+string id = 1;
+string nom = 2;
+string prenom = 3;
+int32 age = 4;
+Fiche fiche=5;
+
+}
+
+
+// Définition des messages de requête et de réponse pour les méthodes 
+
+// Nouveau message pour ajouter un joueur
+message AddJoueurRequest {
+  string nom = 1;
+  string prenom = 2;
+  int32 age = 3;
+  Fiche fiche = 4;
+}
+
+message AddJoueurResponse {
+  Joueur joueur = 1;
+}
+
+message UpdateJoueurRequest {
+  string id = 1;
+  string nom = 2;
+  string prenom = 3;
+  int32 age = 4;
+  Fiche fiche = 5;
+}
+
+message UpdateJoueurResponse {
+  Joueur joueur = 1;
+}
+
+
+message GetJoueurRequest {
+string joueur_id = 1;
+}
+message GetJoueurResponse {
+Joueur joueur = 1;
+}
+
+
+message GetALLJoueurResponse {
+repeated Joueur joueurs = 1;
+}
+
+
+// Définir le message DeleteJoueurResponse
+message DeleteJoueurResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+
+// Définition du service de joueurs
+service JoueurService {
+
+rpc AddJoueur(AddJoueurRequest) returns (AddJoueurResponse); 
+rpc GetJoueur(GetJoueurRequest) returns (GetJoueurResponse);
+rpc UpdateJoueur(UpdateJoueurRequest) returns (UpdateJoueurResponse);
+rpc GetAllJoueurs(google.protobuf.Empty) returns (GetALLJoueurResponse);
+rpc DeleteJoueur(GetJoueurRequest) returns (DeleteJoueurResponse);
+
+}
