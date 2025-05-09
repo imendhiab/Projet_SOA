@@ -18,7 +18,8 @@ string id = 1;
 string nom = 2;
 string prenom = 3;
 int32 age = 4;
-Fiche fiche=5;
+Fiche fiche = 5;
+
 
 }
 
@@ -30,7 +31,7 @@ message AddJoueurRequest {
   string nom = 1;
   string prenom = 2;
   int32 age = 3;
-  Fiche fiche = 4;
+ Fiche fiche = 4;
 }
 
 message AddJoueurResponse {
@@ -42,7 +43,7 @@ message UpdateJoueurRequest {
   string nom = 2;
   string prenom = 3;
   int32 age = 4;
-  Fiche fiche = 5;
+ Fiche fiche = 5;
 }
 
 message UpdateJoueurResponse {

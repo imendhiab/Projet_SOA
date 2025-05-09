@@ -8,12 +8,11 @@ const ficheSchema = new mongoose.Schema({
 });
 
 const joueurSchema = new mongoose.Schema({
-  id: String,
+  id: String,  
   nom: String,
   prenom: String,
   age: Number,
   fiche: [ficheSchema]
 });
-
 
 module.exports = mongoose.model('Joueur', joueurSchema);
