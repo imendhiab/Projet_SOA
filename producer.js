@@ -12,3 +12,4 @@ messages: [{ value: JSON.stringify(message) }],
 });
 await producer.disconnect();
 };
+module.exports={sendMessage};

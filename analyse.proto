@@ -1,0 +1,14 @@
+syntax = "proto3";
+package packageAnalyse;
+
+message ImageRequest {
+  bytes image = 1;
+}
+
+message ImageResponse {
+  string prediction = 1;
+}
+
+service ImageAnalysis {
+  rpc AnalyserImage (ImageRequest) returns (ImageResponse);
+}

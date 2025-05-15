@@ -2,10 +2,10 @@
 scalar Date
 
 type Fiche {
-  id: ID!
+  id: ID
   date: Date
-  tension: Float!
-  oxy: Float!
+  tension: Float
+  oxy: Float
 }
 
 type Joueur {
@@ -13,7 +13,7 @@ type Joueur {
   nom: String!
   prenom: String!
   age: Int!
-  fiches: [Fiche!]!
+  fiches: [Fiche]
 }
 
 type Query {
@@ -27,7 +27,7 @@ type Mutation {
     nom: String!
     prenom: String!
     age: Int!
-    fiches: [FicheInputFields!]!
+    fiches: [FicheInputFields!]
   ): Joueur!
 
   updateJoueur(

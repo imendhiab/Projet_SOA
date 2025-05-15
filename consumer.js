@@ -22,4 +22,4 @@ const consumeMessages = async (topic) => {
   });
 };
 
-consumeMessages('joueur1_topic');
+consumeMessages('joueur3_topic');

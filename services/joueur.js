@@ -1,7 +1,7 @@
 // joueurMicroservice.js
 const Joueur = require('../models/joueur_model');
 const mongoose = require('mongoose');
-
+const ObjectId = mongoose.Types.ObjectId;
 
 //const { Timestamp } = require('google-protobuf/google/protobuf/timestamp_pb');
 
@@ -32,19 +32,19 @@ module.exports = {
     try {
       const data = call.request;
       const joueur = new Joueur({
-        id:data.id,
+        //id:data.id,
         nom: data.nom,
         prenom: data.prenom,
         age: data.age,
         fiche:[ {
-          id:data.fiche.id,
+          //id:data.fiche.id,
           date: timestampToDate(data.fiche.date),
           tension: data.fiche.tension,
           oxy: data.fiche.oxy
         }]
       });
       const saved = await joueur.save();
-      callback(null, { joueur: saved });
+      callback(null, { joueur: { ...saved.toObject(), id: saved._id.toString() } });
     } catch (err) {
       callback(err);
     }
@@ -53,7 +53,16 @@ module.exports = {
   //Récupérer un joueur via son id
   GetJoueur: async (call, callback) => {
     try {
-      const joueur = await Joueur.findOne({ id: call.request.joueur_id });
+      
+   
+  const { joueur_id } = call.request;
+console.log("📥 Reçu pour MAJ:", call.request);
+
+      if (!ObjectId.isValid(joueur_id)) {
+        return callback({ code: 3, message: "ID invalide" });
+      }
+      const objectId = new ObjectId(joueur_id);
+      const joueur = await Joueur.findOne({ _id: objectId });
       if (!joueur) {
         return callback({ code: 5, message: "Joueur non trouvé" });
       }
@@ -78,9 +87,9 @@ module.exports = {
     try {
       const data = call.request;
       // Convertir l'ID du joueur en ObjectId si c'est une chaîne
-      const joueurId = data.id;  // Conversion ici
+      //const joueurId = data.id;  // Conversion ici
       const joueur = await Joueur.findOneAndUpdate(
-        { id: joueurId
+        { _id: data.id
       },
         {
           $set: {
@@ -110,30 +119,30 @@ module.exports = {
     }
   },
   
-   //***********suppression d'un joueur*******
+   //suppression d'un joueur
    DeleteJoueur: async (call, callback) => {
     try {
       const { joueur_id } = call.request;
-
-      // Trouver le joueur à supprimer
-      const joueur = await Joueur.findOne({ id: joueur_id });
-      if (!joueur) {
-        return callback({
-          code: 5,
-          message: "Joueur non trouvé!"
-        });
+console.log("📥 Reçu pour suppression:", call.request);
+      if (!ObjectId.isValid(joueur_id)) {
+        return callback({ code: 3, message: "ID invalide" });
       }
 
-      // Supprimer le joueur
-      await Joueur.deleteOne({ id: joueur_id });
+      const objectId = new ObjectId(joueur_id);
+      const joueur = await Joueur.findOne({ _id: objectId });
 
-      // Retourner une réponse indiquant que la suppression a réussi
+      if (!joueur) {
+        return callback({ code: 5, message: "Joueur non trouvé!" });
+      }
+
+      await Joueur.deleteOne({ _id: objectId });
       callback(null, { success: true, message: "Joueur supprimé avec succès" });
     } catch (err) {
-      callback(err);
-    }
-  }, 
+          console.error("❌ Erreur pendant la suppression:", err);  // <-- Ajout ici
 
+      callback({ code: 13, message: "Erreur serveur" });
+    }
+  }
 };
 
 
